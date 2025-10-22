@@ -1,0 +1,7 @@
+flask
+dash
+dash-bootstrap-components
+pandas
+requests
+autogluon.timeseries
+plotly
