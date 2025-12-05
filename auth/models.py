@@ -32,6 +32,10 @@ from sqlalchemy import (
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker, Session
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from sqlalchemy.types import JSON
+# pastikan diimpor agar dikenali saat init_db()
+
+
 # ---------------------------------------------------------------------------
 # Configuration: change via environment variable
 # ---------------------------------------------------------------------------
@@ -91,6 +95,7 @@ class User(Base):
     telegram_id = Column(String(32), nullable=True)  
 
     role = relationship("Role", lazy="joined")
+    # forecasts = relationship("ForecastResult", back_populates="user", cascade="all, delete-orphan")
 
     def set_password(self, plain: str) -> None:
         """
@@ -108,7 +113,33 @@ class User(Base):
 
     def __repr__(self):
         return f"<User id={self.id} username={self.username} active={self.is_active} role={self.role.name if self.role else None}>"
+    
 
+class ForecastResult(Base):
+    __tablename__ = "forecast_results"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    model_name = Column(String(100))
+    uploaded_filename = Column(String(255))
+    forecast_output = Column(JSON)   # hasil forecasting
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    # Relasi 1-1 ke RealDataInput
+    real_data_input = relationship("RealDataInput", uselist=False, back_populates="forecast")
+
+
+class RealDataInput(Base):
+    __tablename__ = "real_data_inputs"
+
+    id = Column(Integer, primary_key=True)
+    forecast_id = Column(Integer, ForeignKey("forecast_results.id"))
+    real_data = Column(JSON)
+    alert_sent = Column(Boolean, default=False)
+    anomalies_summary = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    forecast = relationship("ForecastResult", back_populates="real_data_input")
 # ---------------------------------------------------------------------------
 # DB utilities
 # ---------------------------------------------------------------------------

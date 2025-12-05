@@ -6,6 +6,8 @@ import dash_bootstrap_components as dbc
 dash.register_page(__name__, path='/forecasting', name='Forecasting', order=1, icon='bi bi-graph-up')
 
 def layout():
+
+
     controls_card = dbc.Card(
         [
             dbc.CardHeader(html.Strong("Upload & Forecast Settings")),
@@ -26,6 +28,18 @@ def layout():
                         multiple=False
                     ),
                     html.Div([
+                            dcc.Store(id='upload-memory', storage_type='local'),
+
+                             # ✅ Store untuk hasil forecasting
+                            dcc.Store(id='forecast-memory', storage_type='local'),
+
+                            dcc.Store(id='forecast-metadata', storage_type='local'),
+                   
+
+                            # ✅ Store untuk UI state (dropdown, pred_len, dsb)
+                            dcc.Store(id='ui-memory', storage_type='local'),
+
+
                         html.Label('Pilih Model Chronos:'),
                         dcc.Dropdown(
                             id='chronos-model',
@@ -47,6 +61,11 @@ def layout():
                     ], style={'marginBottom': 12}),
                     html.Div(id='select-columns'),
                     # html.Div(id='model-params', style={'marginTop': 8}), 
+                    # di forecast.py
+                    html.Div([
+                        dcc.Input(id='pred-len', type='number', value=7, min=1)
+                    ], style={'display': 'none'}),
+
                     html.Div(className="d-flex justify-content-between", children=[
                         html.Button('Forecast', id='forecast-btn', n_clicks=0, className="btn btn-primary"),
                         dbc.Button("Reset Upload", id="reset-upload", color="secondary", outline=True, className="ms-2")
@@ -86,7 +105,14 @@ def layout():
     )
 
     return dbc.Container(
-        [
+        [   
+                dcc.Interval(
+                            id='page-load-trigger',
+                            interval=500,      # 0.5 detik
+                            n_intervals=0,
+                            max_intervals=1    # hanya jalan sekali setiap load
+                                    ),
+
             dbc.Row([dbc.Col(controls_card, md=4), dbc.Col([preview_card, result_card], md=8)], className="g-3")
         ],
         fluid=True,

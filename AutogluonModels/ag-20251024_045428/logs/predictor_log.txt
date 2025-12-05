@@ -1,0 +1,414 @@
+Beginning AutoGluon training... Time limit = 180s
+AutoGluon will save models to 'D:\Kerja\TensaiTech\prob-forecast\AutogluonModels\ag-20251024_045428'
+Beginning AutoGluon training... Time limit = 180s
+AutoGluon will save models to 'D:\Kerja\TensaiTech\prob-forecast\AutogluonModels\ag-20251024_045429'
+Beginning AutoGluon training... Time limit = 180s
+AutoGluon will save models to 'D:\Kerja\TensaiTech\prob-forecast\AutogluonModels\ag-20251024_045429-001'
+=================== System Info ===================
+AutoGluon Version:  1.4.0
+Python Version:     3.12.2
+Operating System:   Windows
+Platform Machine:   AMD64
+Platform Version:   10.0.26100
+CPU Count:          20
+GPU Count:          0
+Memory Avail:       2.16 GB / 15.71 GB (13.8%)
+Disk Space Avail:   89.45 GB / 239.46 GB (37.4%)
+===================================================
+=================== System Info ===================
+AutoGluon Version:  1.4.0
+Python Version:     3.12.2
+Operating System:   Windows
+Platform Machine:   AMD64
+Platform Version:   10.0.26100
+CPU Count:          20
+GPU Count:          0
+Memory Avail:       2.13 GB / 15.71 GB (13.6%)
+Disk Space Avail:   89.45 GB / 239.46 GB (37.4%)
+===================================================
+=================== System Info ===================
+AutoGluon Version:  1.4.0
+Python Version:     3.12.2
+Operating System:   Windows
+Platform Machine:   AMD64
+Platform Version:   10.0.26100
+CPU Count:          20
+GPU Count:          0
+Memory Avail:       2.24 GB / 15.71 GB (14.3%)
+Disk Space Avail:   89.45 GB / 239.46 GB (37.4%)
+===================================================
+=================== System Info ===================
+AutoGluon Version:  1.4.0
+Python Version:     3.12.2
+Operating System:   Windows
+Platform Machine:   AMD64
+Platform Version:   10.0.26100
+CPU Count:          20
+GPU Count:          0
+Memory Avail:       2.13 GB / 15.71 GB (13.6%)
+Disk Space Avail:   89.45 GB / 239.46 GB (37.4%)
+===================================================
+
+Fitting with arguments:
+
+Fitting with arguments:
+
+Fitting with arguments:
+
+Fitting with arguments:
+{'enable_ensemble': False,
+ 'eval_metric': WQL,
+ 'hyperparameters': {'Chronos': [{'ag_args': {'name_suffix': '-ZeroShot'},
+                                  'model_path': 'amazon/chronos-t5-tiny'}]},
+ 'known_covariates_names': [],
+ 'num_val_windows': 1,
+ 'prediction_length': 7,
+ 'quantile_levels': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+ 'random_seed': 123,
+ 'refit_every_n_windows': 1,
+ 'refit_full': False,
+ 'skip_model_selection': False,
+ 'target': 'target',
+ 'time_limit': 180,
+ 'verbosity': 2}
+
+{'enable_ensemble': False,
+ 'eval_metric': WQL,
+ 'hyperparameters': {'Chronos': [{'ag_args': {'name_suffix': '-ZeroShot'},
+                                  'model_path': 'amazon/chronos-t5-tiny'}]},
+ 'known_covariates_names': [],
+ 'num_val_windows': 1,
+ 'prediction_length': 7,
+ 'quantile_levels': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+ 'random_seed': 123,
+ 'refit_every_n_windows': 1,
+ 'refit_full': False,
+ 'skip_model_selection': False,
+ 'target': 'target',
+ 'time_limit': 180,
+ 'verbosity': 2}
+
+{'enable_ensemble': False,
+ 'eval_metric': WQL,
+ 'hyperparameters': {'Chronos': [{'ag_args': {'name_suffix': '-ZeroShot'},
+                                  'model_path': 'amazon/chronos-t5-tiny'}]},
+ 'known_covariates_names': [],
+ 'num_val_windows': 1,
+ 'prediction_length': 7,
+ 'quantile_levels': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+ 'random_seed': 123,
+ 'refit_every_n_windows': 1,
+ 'refit_full': False,
+ 'skip_model_selection': False,
+ 'target': 'target',
+ 'time_limit': 180,
+ 'verbosity': 2}
+
+{'enable_ensemble': False,
+ 'eval_metric': WQL,
+ 'hyperparameters': {'Chronos': [{'ag_args': {'name_suffix': '-ZeroShot'},
+                                  'model_path': 'amazon/chronos-t5-tiny'}]},
+ 'known_covariates_names': [],
+ 'num_val_windows': 1,
+ 'prediction_length': 7,
+ 'quantile_levels': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+ 'random_seed': 123,
+ 'refit_every_n_windows': 1,
+ 'refit_full': False,
+ 'skip_model_selection': False,
+ 'target': 'target',
+ 'time_limit': 180,
+ 'verbosity': 2}
+
+Inferred time series frequency: 'D'
+Inferred time series frequency: 'D'
+Inferred time series frequency: 'D'
+Inferred time series frequency: 'D'
+Provided train_data has 71 rows, 1 time series. Median time series length is 71 (min=71, max=71). 
+Provided train_data has 71 rows, 1 time series. Median time series length is 71 (min=71, max=71). 
+Provided train_data has 71 rows, 1 time series. Median time series length is 71 (min=71, max=71). 
+Provided train_data has 71 rows, 1 time series. Median time series length is 71 (min=71, max=71). 
+
+Provided data contains following columns:
+
+Provided data contains following columns:
+	target: 'target'
+
+Provided data contains following columns:
+
+Provided data contains following columns:
+	target: 'target'
+	target: 'target'
+	target: 'target'
+
+AutoGluon will gauge predictive performance using evaluation metric: 'WQL'
+
+AutoGluon will gauge predictive performance using evaluation metric: 'WQL'
+
+AutoGluon will gauge predictive performance using evaluation metric: 'WQL'
+
+AutoGluon will gauge predictive performance using evaluation metric: 'WQL'
+	This metric's sign has been flipped to adhere to being higher_is_better. The metric score can be multiplied by -1 to get the metric value.
+	This metric's sign has been flipped to adhere to being higher_is_better. The metric score can be multiplied by -1 to get the metric value.
+	This metric's sign has been flipped to adhere to being higher_is_better. The metric score can be multiplied by -1 to get the metric value.
+	This metric's sign has been flipped to adhere to being higher_is_better. The metric score can be multiplied by -1 to get the metric value.
+===================================================
+===================================================
+===================================================
+===================================================
+
+Starting training. Start time is 2025-10-24 11:54:32
+
+Starting training. Start time is 2025-10-24 11:54:32
+
+Starting training. Start time is 2025-10-24 11:54:32
+
+Starting training. Start time is 2025-10-24 11:54:32
+Models that will be trained: ['Chronos-ZeroShot[amazon__chronos-t5-tiny]']
+Models that will be trained: ['Chronos-ZeroShot[amazon__chronos-t5-tiny]']
+Models that will be trained: ['Chronos-ZeroShot[amazon__chronos-t5-tiny]']
+Models that will be trained: ['Chronos-ZeroShot[amazon__chronos-t5-tiny]']
+Training timeseries model Chronos-ZeroShot[amazon__chronos-t5-tiny]. Training for up to 176.8s of the 176.8s of remaining time.
+Training timeseries model Chronos-ZeroShot[amazon__chronos-t5-tiny]. Training for up to 176.9s of the 176.9s of remaining time.
+Training timeseries model Chronos-ZeroShot[amazon__chronos-t5-tiny]. Training for up to 175.7s of the 175.7s of remaining time.
+Training timeseries model Chronos-ZeroShot[amazon__chronos-t5-tiny]. Training for up to 174.9s of the 174.9s of remaining time.
+	Warning: Exception caused Chronos-ZeroShot[amazon__chronos-t5-tiny] to fail during training... Skipping this model.
+	Warning: Exception caused Chronos-ZeroShot[amazon__chronos-t5-tiny] to fail during training... Skipping this model.
+	Warning: Exception caused Chronos-ZeroShot[amazon__chronos-t5-tiny] to fail during training... Skipping this model.
+Traceback (most recent call last):
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\trainer.py", line 357, in _train_and_save
+    model = self._train_single(train_data, model, val_data=val_data, time_limit=time_limit)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\trainer.py", line 273, in _train_single
+    model.fit(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 515, in fit
+    self._fit(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\multi_window\multi_window_model.py", line 151, in _fit
+    model.score_and_cache_oof(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 730, in score_and_cache_oof
+    oof_predictions = self.predict(past_data, known_covariates=known_covariates, **predict_kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 608, in predict
+    predictions = self._predict(data=data, known_covariates=known_covariates, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 637, in _predict
+    self.model_pipeline.model.eval()
+    ^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 240, in model_pipeline
+    self.load_model_pipeline()  # load model pipeline to device memory
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 295, in load_model_pipeline
+    pipeline = BaseChronosPipeline.from_pretrained(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\pipeline\base.py", line 160, in from_pretrained
+    return class_.from_pretrained(pretrained_model_name_or_path, *model_args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\pipeline\chronos.py", line 540, in from_pretrained
+    inner_model = AutoModelForSeq2SeqLM.from_pretrained(*args, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\models\auto\auto_factory.py", line 564, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 262, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 4397, in from_pretrained
+    dispatch_model(model, **device_map_kwargs)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\accelerate\big_modeling.py", line 502, in dispatch_model
+    model.to(device)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 3162, in to
+    return super().to(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 1355, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 915, in _apply
+    module._apply(fn)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 942, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 1348, in convert
+    raise NotImplementedError(
+NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
+
+Traceback (most recent call last):
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\trainer.py", line 357, in _train_and_save
+    model = self._train_single(train_data, model, val_data=val_data, time_limit=time_limit)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\trainer.py", line 273, in _train_single
+    model.fit(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 515, in fit
+    self._fit(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\multi_window\multi_window_model.py", line 151, in _fit
+    model.score_and_cache_oof(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 730, in score_and_cache_oof
+    oof_predictions = self.predict(past_data, known_covariates=known_covariates, **predict_kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 608, in predict
+    predictions = self._predict(data=data, known_covariates=known_covariates, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 637, in _predict
+    self.model_pipeline.model.eval()
+    ^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 240, in model_pipeline
+    self.load_model_pipeline()  # load model pipeline to device memory
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 295, in load_model_pipeline
+    pipeline = BaseChronosPipeline.from_pretrained(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\pipeline\base.py", line 160, in from_pretrained
+    return class_.from_pretrained(pretrained_model_name_or_path, *model_args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\pipeline\chronos.py", line 540, in from_pretrained
+    inner_model = AutoModelForSeq2SeqLM.from_pretrained(*args, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\models\auto\auto_factory.py", line 564, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 262, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 4397, in from_pretrained
+    dispatch_model(model, **device_map_kwargs)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\accelerate\big_modeling.py", line 502, in dispatch_model
+    model.to(device)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 3162, in to
+    return super().to(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 1355, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 915, in _apply
+    module._apply(fn)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 942, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 1348, in convert
+    raise NotImplementedError(
+NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
+
+Traceback (most recent call last):
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\trainer.py", line 357, in _train_and_save
+    model = self._train_single(train_data, model, val_data=val_data, time_limit=time_limit)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\trainer.py", line 273, in _train_single
+    model.fit(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 515, in fit
+    self._fit(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\multi_window\multi_window_model.py", line 151, in _fit
+    model.score_and_cache_oof(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 730, in score_and_cache_oof
+    oof_predictions = self.predict(past_data, known_covariates=known_covariates, **predict_kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 608, in predict
+    predictions = self._predict(data=data, known_covariates=known_covariates, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 637, in _predict
+    self.model_pipeline.model.eval()
+    ^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 240, in model_pipeline
+    self.load_model_pipeline()  # load model pipeline to device memory
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 295, in load_model_pipeline
+    pipeline = BaseChronosPipeline.from_pretrained(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\pipeline\base.py", line 160, in from_pretrained
+    return class_.from_pretrained(pretrained_model_name_or_path, *model_args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\pipeline\chronos.py", line 540, in from_pretrained
+    inner_model = AutoModelForSeq2SeqLM.from_pretrained(*args, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\models\auto\auto_factory.py", line 564, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 262, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 4397, in from_pretrained
+    dispatch_model(model, **device_map_kwargs)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\accelerate\big_modeling.py", line 502, in dispatch_model
+    model.to(device)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 3162, in to
+    return super().to(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 1355, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 915, in _apply
+    module._apply(fn)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 942, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 1348, in convert
+    raise NotImplementedError(
+NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
+
+Training complete. Models trained: []
+Total runtime: 10.30 s
+Trainer has no fit models that can predict.
+Training complete. Models trained: []
+Total runtime: 10.30 s
+Training complete. Models trained: []
+Trainer has no fit models that can predict.
+Total runtime: 10.30 s
+Trainer has no fit models that can predict.
+	Warning: Exception caused Chronos-ZeroShot[amazon__chronos-t5-tiny] to fail during training... Skipping this model.
+Traceback (most recent call last):
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\trainer.py", line 357, in _train_and_save
+    model = self._train_single(train_data, model, val_data=val_data, time_limit=time_limit)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\trainer.py", line 273, in _train_single
+    model.fit(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 515, in fit
+    self._fit(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\multi_window\multi_window_model.py", line 151, in _fit
+    model.score_and_cache_oof(
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 730, in score_and_cache_oof
+    oof_predictions = self.predict(past_data, known_covariates=known_covariates, **predict_kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\abstract\abstract_timeseries_model.py", line 608, in predict
+    predictions = self._predict(data=data, known_covariates=known_covariates, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 637, in _predict
+    self.model_pipeline.model.eval()
+    ^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 240, in model_pipeline
+    self.load_model_pipeline()  # load model pipeline to device memory
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\model.py", line 295, in load_model_pipeline
+    pipeline = BaseChronosPipeline.from_pretrained(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\pipeline\base.py", line 160, in from_pretrained
+    return class_.from_pretrained(pretrained_model_name_or_path, *model_args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\autogluon\timeseries\models\chronos\pipeline\chronos.py", line 540, in from_pretrained
+    inner_model = AutoModelForSeq2SeqLM.from_pretrained(*args, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\models\auto\auto_factory.py", line 564, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 262, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 4397, in from_pretrained
+    dispatch_model(model, **device_map_kwargs)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\accelerate\big_modeling.py", line 502, in dispatch_model
+    model.to(device)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\transformers\modeling_utils.py", line 3162, in to
+    return super().to(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 1355, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 915, in _apply
+    module._apply(fn)
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 942, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "D:\Kerja\TensaiTech\prob-forecast\forecast_env\Lib\site-packages\torch\nn\modules\module.py", line 1348, in convert
+    raise NotImplementedError(
+NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
+
+Training complete. Models trained: []
+Total runtime: 10.47 s
+Trainer has no fit models that can predict.

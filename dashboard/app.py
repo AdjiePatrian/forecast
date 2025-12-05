@@ -170,6 +170,7 @@ def create_dash_app(server):
 
         return html.Div(
             [
+                dcc.Store(id='forecast-memory', storage_type='local'),
                 dbc.Navbar(
                     dbc.Container(
                         [
@@ -197,6 +198,7 @@ def create_dash_app(server):
                                 id="main-col",
                                 width=10,
                                 style={"marginLeft": "18%", "padding": "24px"},
+                                
                             ),
                         ],
                         className="g-0",
@@ -244,14 +246,33 @@ def create_dash_app(server):
 
 
     try:
-        from dashboard.callbacks import forecast_callbacks, compare_callbacks
-        try:
-            forecast_callbacks.register_callbacks(app, shared_store)
-            compare_callbacks.register_callbacks(app, shared_store)
-        except Exception:
-            print("[ERROR]forecast_callbacks or compare_callbacks registration failed")
+        from dashboard.callbacks import forecast_callbacks
     except Exception:
-        print("[ERROR]forecast_callbacks or compare_callbacks not found")
+        print("[ERROR]forecast_callbacks import failed")
+
+    try:
+        from dashboard.callbacks import compare_callbacks   
+    except Exception:
+        print("[ERROR]compare_callbacks import failed") 
+
+    import traceback
+    try:
+        print("[DEBUG] Attempting to register forecast_callbacks...")
+        forecast_callbacks.register_callbacks(app, shared_store)
+        print("[OK] forecast_callbacks registered")
+    except Exception as e:
+        print("[ERROR] forecast_callbacks registration failed:", repr(e))
+        print("=== TRACEBACK (forecast_callbacks) ===")
+        traceback.print_exc()
+        print("=== END TRACEBACK ===")
+
+    try:
+            print("[DEBUG] Attempting to register compare_callbacks...")
+            compare_callbacks.register_callbacks(app )
+            print("[OK] compare_callbacks registered")
+    except Exception as e:
+            print("[ERROR] compare_callbacks registration failed:", repr(e))
+            print("[ERROR]compare_callbacks registration failed")
 
     # optional auth/admin callbacks if present
     try:
@@ -266,5 +287,10 @@ def create_dash_app(server):
             print("[ERROR]admin_callbacks not found")
     except Exception:
         print("[ERROR]auth/admin callbacks not found")
+
+
+    print("Registered callbacks:", list(app.callback_map.keys()))
+
+    
 
     return app

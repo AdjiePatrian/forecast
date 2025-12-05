@@ -83,6 +83,21 @@ def main():
         except Exception:
             pass
 
+    try:
+        if DEBUG and hasattr(dash_app, "enable_dev_tools"):
+            dash_app.enable_dev_tools(
+                debug=True,
+                dev_tools_ui=True,
+                dev_tools_props_check=True,
+                dev_tools_serve_dev_bundles=True,
+                dev_tools_hot_reload=True,
+            )
+            print("[run] Dash Dev Tools ENABLED ✅")
+        else:
+            print("[run] Dash Dev Tools disabled (DEBUG=False)")
+    except Exception as e:
+        print(f"[run] Gagal mengaktifkan Dash Dev Tools: {e}")
+
     # 6) jalankan Flask (yang juga melayani Dash + API)
     host = os.environ.get("HOST", DEFAULT_HOST)
     port = int(os.environ.get("PORT", DEFAULT_PORT))

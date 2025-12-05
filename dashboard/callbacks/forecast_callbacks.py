@@ -1,12 +1,17 @@
 # dashboard/callbacks/forecast_callbacks.py
 from dash import Input, Output, State, html, dcc
 from dash import dash_table
+from dash.exceptions import PreventUpdate
 import plotly.graph_objs as go
 import pandas as pd
 import io, base64, requests
 import logging, traceback
 import numpy as np
+import dash
 
+from auth.models import get_db_session, ForecastResult, RealDataInput, get_user_by_username
+from flask_login import current_user
+from dash.exceptions import PreventUpdate
 
 
 def sanitize_df_for_chronos(df, timestamp_col=None, target_col=None, preview_rows=3):
@@ -76,19 +81,21 @@ def sanitize_df_for_chronos(df, timestamp_col=None, target_col=None, preview_row
 def register_callbacks(app, uploaded_df):
     @app.callback(
         [Output('select-columns', 'children'),
-         Output('preview-data', 'children')],
+         Output('preview-data', 'children'),
+         Output('upload-memory', 'data')],
         [Input('upload-data', 'contents')],
-        [State('upload-data', 'filename')]
+        [State('upload-data', 'filename')],
+        prevent_initial_call=True
     )
     def update_select_columns(contents, filename):
         if contents is None:
-            return "", ""
+            return "", "", dash.no_update
         try:
             content_type, content_string = contents.split(',')
             decoded = io.BytesIO(base64.b64decode(content_string))
             df = pd.read_csv(decoded)
         except Exception:
-            return html.Div("Gagal membaca file CSV. Pastikan format benar.", style={'color': 'red'}), ""
+            return html.Div("[ERROR] Gagal membaca file CSV. Pastikan format benar.", style={'color': 'red'}), ""
         uploaded_df['df'] = df
         columns = df.columns
         dropdowns = [
@@ -98,9 +105,9 @@ def register_callbacks(app, uploaded_df):
             dcc.Dropdown(id='timestamp-col', options=[{'label': c, 'value': c} for c in columns], value=columns[1], clearable=False),
             html.Label('Target Column:', style={'marginTop': 8}),
             dcc.Dropdown(id='target-col', options=[{'label': c, 'value': c} for c in columns], value=columns[2], clearable=False),
-            html.Label('Prediction Length:', style={'marginTop': 8}),
-            dcc.Input(id='pred-len', type='number', value=7, min=1, className='form-control'),
-            html.Br()
+            # html.Label('Prediction Length:', style={'marginTop': 8}),
+            # dcc.Input(id='pred-len', type='number', value=7, min=1, className='form-control'),
+            # html.Br()
         ]
         preview_table = dash_table.DataTable(
             data=df.head(10).to_dict('records'),
@@ -110,22 +117,30 @@ def register_callbacks(app, uploaded_df):
             style_header={'backgroundColor': '#2c3e50', 'color': 'white', 'fontWeight': 'bold'},
             style_as_list_view=True
         )
-        return dropdowns, preview_table
+        return dropdowns, preview_table, df.to_dict('records')
 
     @app.callback(
-        [Output('forecast-log', 'children'),
+        [Output('forecast-log', 'children', allow_duplicate=True),
          Output('forecast-result', 'children'),
-         Output('forecast-chart', 'figure')],
+         Output('forecast-chart', 'figure'),
+         Output('forecast-memory', 'data'),
+         Output('forecast-metadata', 'data')],
         Input('forecast-btn', 'n_clicks'),
         State('id-col', 'value'),
         State('timestamp-col', 'value'),
         State('target-col', 'value'),
         State('pred-len', 'value'),
         State('chronos-model', 'value'),
+        State('upload-memory', 'data'),
+        State('upload-data', 'filename'),
         prevent_initial_call=True
     )
-    def probabilistic_forecast(n_clicks, id_col, timestamp_col, target_col, pred_len, chronos_model):
-        
+    def probabilistic_forecast(n_clicks, id_col, timestamp_col, target_col, pred_len, chronos_model, upload_memory,filename):
+
+        if upload_memory is None:
+            return print("[DEBUG] probabilistic_forecast: upload_memory kosong — tidak ada data terunggah."), "", go.Figure(), None
+        # else:
+            # print(upload_memory)
         logger = logging.getLogger("dashboard.forecast")
         if n_clicks is None or n_clicks == 0:
             return "Log belum ada, silakan klik Forecast.", "", go.Figure()
@@ -168,7 +183,7 @@ def register_callbacks(app, uploaded_df):
                 for c, _ in ndarray_cols:
                     df_input[c] = df_input[c].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
         except Exception as e:
-            logger.exception("Sanitization failed")
+            logger.exception("[ERROR] Sanitization failed")
             tb = traceback.format_exc()
             return html.Div(f"Sanitization Error: {str(e)}\n{tb}", style={'color': 'red'}), "", go.Figure()
 
@@ -197,9 +212,23 @@ def register_callbacks(app, uploaded_df):
                 chronos_model=chronos_model,
             )
             forecast_log = logs or ""
-            result_df = df_pred.copy() if hasattr(df_pred, "copy") else pd.DataFrame(df_pred)
+            # result_df = df_pred.copy() if hasattr(df_pred, "copy") else pd.DataFrame(df_pred)
+
+            try:
+                if hasattr(df_pred, "to_pandas"):
+                    result_df = df_pred.to_pandas()
+                elif hasattr(df_pred, "to_data_frame"):
+                    result_df = df_pred.to_data_frame()
+                else:
+                    result_df = pd.DataFrame(df_pred)
+            except Exception as e:
+                    import traceback
+                    tb = traceback.format_exc()
+                    logger.warning(f"[ERROR] Gagal konversi hasil prediksi ke DataFrame biasa: {e}\n{tb}")
+                    result_df = pd.DataFrame(df_pred)
+
         except Exception as e_model:
-            logger.exception("Model inference error")
+            logger.exception("[ERROR]Model inference error")
             tb = traceback.format_exc()
             # try to include logs variable if exists
             logs_preview = locals().get("logs", "")
@@ -223,7 +252,7 @@ def register_callbacks(app, uploaded_df):
                     result_df['timestamp'] = pd.to_datetime(result_df['timestamp'], errors='coerce')
                     result_df['timestamp_str'] = result_df['timestamp'].dt.strftime('%Y-%m-%d')
         except Exception:
-            logger.exception("Failed to normalize timestamp in result_df")
+            logger.exception("[ERROR] Failed to normalize timestamp in result_df")
 
         # If the model returns an id column (e.g., 'item_id' or same as id_col), filter to first id for plotting
         try:
@@ -235,7 +264,7 @@ def register_callbacks(app, uploaded_df):
                     logger.debug("Multiple series in result_df; selecting first id: %s", unique_ids[0])
                 result_df = result_df[result_df[filter_col] == unique_ids[0]]
         except Exception:
-            logger.exception("Failed to filter by id column")
+            logger.exception(" [ERROR]Failed to filter by id column")
 
         # Adjust quantiles / mean to be consistent
         try:
@@ -247,13 +276,13 @@ def register_callbacks(app, uploaded_df):
             if 'mean' in result_df.columns and 'p10' in result_df.columns and 'p90' in result_df.columns:
                 result_df['mean'] = result_df['mean'].clip(lower=result_df['p10'], upper=result_df['p90'])
         except Exception:
-            logger.exception("Failed to normalize quantiles/mean")
+            logger.exception(" [ERROR] Failed to normalize quantiles/mean")
 
         # store forecast in shared dict for later download/use
         try:
             uploaded_df['forecast'] = result_df.copy()
         except Exception:
-            logger.exception("Failed to write forecast to uploaded_df['forecast']")
+            logger.exception("[ERROR] Failed to write forecast to uploaded_df['forecast']")
 
         # Build DataTable for UI
         try:
@@ -266,7 +295,7 @@ def register_callbacks(app, uploaded_df):
                 style_as_list_view=True
             )
         except Exception:
-            logger.exception("Failed to build result_table")
+            logger.exception("[ERROR] Failed to build result_table")
             result_table = html.Div("Error building result table", style={'color': 'red'})
 
         # Build figure
@@ -285,7 +314,7 @@ def register_callbacks(app, uploaded_df):
                               xaxis_title="Timestamp", yaxis_title="Forecast Value",
                               legend_title="Quantile", margin={'t': 40, 'l': 40, 'r': 24, 'b': 40})
         except Exception:
-            logger.exception("Failed to build figure")
+            logger.exception("[ERROR] Failed to build figure")
             fig = go.Figure()
 
         # finally return log, table and figure
@@ -294,14 +323,119 @@ def register_callbacks(app, uploaded_df):
             short_log = (forecast_log[:2000] + '...') if len(str(forecast_log)) > 2000 else forecast_log
         except Exception:
             short_log = str(forecast_log)
-        return short_log, result_table, fig
+
+        return short_log, result_table, fig, result_df.to_dict('records'),  {"model_name": chronos_model, "uploaded_filename": filename}
+    
 
 
     @app.callback(
-        Output('upload-data', 'contents'),
+        [
+            Output('upload-data', 'contents'),
+            Output('upload-data', 'filename'),
+            Output('upload-memory', 'clear_data'),      # 🆕 tambahkan ini
+            Output('forecast-memory', 'clear_data'),
+            Output('preview-data', 'children', allow_duplicate=True),
+            Output('forecast-result', 'children', allow_duplicate=True),
+            Output('forecast-chart', 'figure', allow_duplicate=True),
+            Output('forecast-metadata', 'clear_data', allow_duplicate=True),
+        ],
         Input('reset-upload', 'n_clicks'),
         prevent_initial_call=True
     )
-    def reset_upload(n):
-        uploaded_df.clear()
-        return None
+    def reset_upload_and_forecast(n_clicks):
+        """Reset uploaded CSV + hasil forecast di browser."""
+        if n_clicks:
+            uploaded_df.clear()
+            empty_fig = go.Figure()
+            return None, None, True, True, None, None, empty_fig, None
+        return dash.no_update, dash.no_update,  dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+
+
+
+
+
+
+    @app.callback(
+    [Output('forecast-result', 'children',allow_duplicate=True),
+     Output('forecast-chart', 'figure', allow_duplicate=True)],
+    [Input('forecast-memory', 'data'),
+    Input('url', 'pathname'),
+    Input('page-load-trigger', 'n_intervals')],
+    prevent_initial_call=True
+    )
+    def restore_previous_forecast(stored_data, pathname, n_intervals):
+        """Menampilkan ulang hasil forecasting dari session/browser dengan debug info."""
+
+        print("\n[DEBUG] restore_previous_forecast() terpanggil")
+        print("[DEBUG] stored_data type:", type(stored_data))
+        if not stored_data:
+            print("[DEBUG] stored_data kosong — tidak ada forecast tersimpan.")
+            return "", go.Figure()
+
+        try:
+            # --- Konversi data ke DataFrame ---
+            df = pd.DataFrame(stored_data)
+            print(f"[DEBUG] DataFrame dibuat dengan {len(df)} baris dan kolom: {list(df.columns)}")
+
+            # --- Membuat tabel hasil forecast ---
+            result_table = dash_table.DataTable(
+                data=df.to_dict('records'),
+                columns=[{"name": i, "id": i} for i in df.columns],
+                page_size=10,
+                style_table={'overflowX': 'auto'},
+                style_cell={'textAlign': 'left', 'padding': '6px'},
+                style_header={'backgroundColor': '#2c3e50', 'color': 'white', 'fontWeight': 'bold'},
+                style_as_list_view=True
+            )
+
+            # --- Membuat grafik hasil forecast ---
+            fig = go.Figure(layout={'template': 'plotly_white'})
+            if 'p90' in df.columns and 'p10' in df.columns:
+                fig.add_trace(go.Scatter(
+                    x=df['timestamp'], y=df['p90'],
+                    line=dict(color='rgba(0,0,0,0)'), showlegend=False, hoverinfo='skip'
+                ))
+                fig.add_trace(go.Scatter(
+                    x=df['timestamp'], y=df['p10'],
+                    line=dict(color='rgba(0,0,0,0)'), fill='tonexty',
+                    fillcolor='rgba(33,150,243,0.16)', name='P10–P90 Interval'
+                ))
+            if 'mean' in df.columns:
+                fig.add_trace(go.Scatter(
+                    x=df['timestamp'], y=df['mean'],
+                    mode='lines+markers', name='Forecast (mean)',
+                    line=dict(width=3), marker=dict(size=6)
+                ))
+            fig.update_layout(
+                title="Restored Forecast",
+                xaxis_title="Timestamp",
+                yaxis_title="Forecast Value"
+            )
+
+            print("[DEBUG] Callback restore_previous_forecast selesai tanpa error.")
+            return result_table, fig
+
+        except Exception as e:
+            import traceback
+            print("[ERROR] restore_previous_forecast gagal:", e)
+            traceback.print_exc()
+
+            # Kembalikan pesan error ke UI agar kelihatan di halaman
+            error_div = html.Div(
+                [
+                    html.H5("⚠️ Terjadi error saat memulihkan hasil forecasting", style={'color': 'red'}),
+                    html.Pre(str(e), style={'whiteSpace': 'pre-wrap', 'fontFamily': 'monospace'})
+                ],
+                style={'padding': '10px', 'backgroundColor': '#ffeeee', 'border': '1px solid #ffaaaa'}
+            )
+
+        return error_div, go.Figure()
+    
+
+  
+
+
+
+
+
+
