@@ -96,7 +96,10 @@ def layout():
                     children=[
                         html.Pre(id='forecast-log', style={'fontSize': '12px', 'whiteSpace': 'pre-wrap', 'background': '#f7f7f9', 'padding': '8px', 'borderRadius': '8px', 'minHeight': '54px'}),
                         html.Div(id='forecast-result', className='mt-3'),
-                        dcc.Graph(id='forecast-chart', config={'displayModeBar': True}, style={'height': '420px', 'marginTop': 12})
+                        dcc.Graph(id='forecast-chart', config={'displayModeBar': True}, style={'height': '420px', 'marginTop': 12}),
+                        # dbc.Button("💾 Save Forecast",id="save-forecast-btn",color="success",className="mt-3",n_clicks=0 )
+
+                        
                     ]
                 )
             ])

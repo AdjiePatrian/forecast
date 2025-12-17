@@ -361,80 +361,193 @@ def register_callbacks(app):
 
     
 
+    # ==============================================================
+    # 🔥 5️⃣ RESET TOTAL — Hapus semua data (DB + LocalStorage + UI)
+    # ==============================================================
+    @app.callback(
+        Output('forecast-memory', 'data', allow_duplicate=True),
+        Output('forecast-metadata', 'data', allow_duplicate=True),
+        Output('real-data-table', 'data', allow_duplicate=True),
+        Output('alert-select', 'options', allow_duplicate=True),
+        Output('compare-chart', 'figure', allow_duplicate=True),
+        Input('reset-compare-btn', 'n_clicks'),
+        prevent_initial_call=True
+    )
+    def reset_all_compare(n):
+        if not n:
+            raise PreventUpdate
+
+        print("[RESET] Tombol Reset Compare ditekan — menghapus DB + localStorage + UI")
+
+        try:
+            with get_db_session() as db:
+                user = get_user_by_username(current_user.username)
+
+                if not user:
+                    print("[RESET][ERROR] User tidak ditemukan.")
+                else:
+                    # 1️⃣ Ambil semua forecast milik user
+                    forecasts = db.query(ForecastResult).filter(
+                        ForecastResult.user_id == user.id
+                    ).all()
+
+                    forecast_ids = [f.id for f in forecasts]
+
+                    print(f"[RESET] Forecast IDs found: {forecast_ids}")
+
+                    if forecast_ids:
+                        # 2️⃣ Hapus semua real data yang terhubung ke forecast tersebut
+                        deleted_real = db.query(RealDataInput).filter(
+                            RealDataInput.forecast_id.in_(forecast_ids)
+                        ).delete(synchronize_session=False)
+
+                        # 3️⃣ Hapus forecast-nya
+                        deleted_forecast = db.query(ForecastResult).filter(
+                            ForecastResult.id.in_(forecast_ids)
+                        ).delete(synchronize_session=False)
+
+                        db.commit()
+
+                        print(f"[RESET] Deleted RealDataInput: {deleted_real}, Deleted ForecastResult: {deleted_forecast}")
+                    else:
+                        print("[RESET] Tidak ada forecast yang perlu dihapus.")
+
+        except Exception as e:
+            print(f"[RESET][ERROR] Gagal menghapus database: {e}")
+
+        # Bersihkan localStorage
+        cleared_forecast = None
+        cleared_metadata = None
+
+        # Kosongkan UI
+        empty_table = []
+        empty_options = []
+
+        fig = go.Figure(layout={'template': 'plotly_white'})
+        fig.update_layout(title="Forecast vs Real Data")
+
+        return cleared_forecast, cleared_metadata, empty_table, empty_options, fig
+
+
+
+    @app.callback(
+    Output("save-forecast-btn", "children", allow_duplicate=True),
+    Output("save-forecast-btn", "color", allow_duplicate=True),
+    Output("save-forecast-btn", "disabled", allow_duplicate=True),
+    Input("save-forecast-btn", "n_clicks"),
+    State("forecast-memory", "data"),
+    State("forecast-metadata", "data"),
+    prevent_initial_call=True
+    )
+    def save_forecast(n, forecast_data, metadata):
+        if not n:
+            raise PreventUpdate
+
+        if not forecast_data:
+            return "❌ No Forecast to Save", "danger", True
+
+        try:
+            with get_db_session() as db:
+                user = get_user_by_username(current_user.username)
+
+                forecast_entry = ForecastResult(
+                    user_id=user.id,
+                    model_name=metadata.get("model_name", "unknown"),
+                    uploaded_filename=metadata.get("uploaded_filename", "unknown.csv"),
+                    forecast_output=forecast_data,
+                    created_at=datetime.utcnow()
+                )
+                db.add(forecast_entry)
+                db.commit()
+
+            print("[SAVE] Forecast saved successfully.")
+            return "✔ Forecast Saved", "success", True
+
+        except Exception as e:
+            print("[SAVE][ERROR] Failed:", e)
+            return "❌ Save Failed", "danger", False
+
+
+
     @app.callback(
         Output('forecast-memory', 'data', allow_duplicate=True),
         Output('real-data-table', 'data', allow_duplicate=True),
         Output('real-data-table', 'style_data_conditional', allow_duplicate=True),
         Output('alert-select', 'options', allow_duplicate=True),
         Input('db-load-trigger', 'n_intervals'),
+        State('forecast-memory', 'data'),
         prevent_initial_call=True
     )
-    def load_data_from_db_on_compare_page(n_intervals):
-        print("[DEBUG] Loading forecast & real data from DB for compare page...")
+    def load_data_from_db_on_compare_page(n_intervals, local_forecast):
+        print("[COMPARE] Loader triggered...")
 
         try:
             with get_db_session() as db:
                 user = get_user_by_username(current_user.username)
-                if not user:
-                    print("[ERROR] User tidak ditemukan.")
-                    return None, [], [], []
 
-                # Ambil forecast terbaru
                 latest_forecast = (
                     db.query(ForecastResult)
                     .filter(ForecastResult.user_id == user.id)
                     .order_by(ForecastResult.created_at.desc())
                     .first()
                 )
-                if not latest_forecast:
-                    print("[INFO] Belum ada forecast tersimpan untuk user ini.")
-                    return None, [], [], []
-
-                # Ambil data real terkait forecast
-                real_entry = (
-                    db.query(RealDataInput)
-                    .filter(RealDataInput.forecast_id == latest_forecast.id)
-                    .order_by(RealDataInput.created_at.desc())
-                    .first()
-                )
-
-                forecast_data = latest_forecast.forecast_output
-                real_data = real_entry.real_data if real_entry else []
-
-# Jika kolom alert_sent belum ada di data lama, tambahkan default False
-                for row in real_data:
-                    if 'alert_sent' not in row:
-                        row['alert_sent'] = real_entry.alert_sent if hasattr(real_entry, 'alert_sent') else False
-
-                print(f"[DEBUG] Loaded forecast_id={latest_forecast.id} with {len(real_data)} real rows")
-
-                # --- Tambahkan perhitungan ulang style anomaly & dropdown options ---
-                style_data_conditional = []
-                options = []
-
-                if real_data:
-                    # buat highlight jika ada anomaly
-                    style_data_conditional = [
-                        {
-                            'if': {'row_index': i},
-                            'backgroundColor': '#ffdddd',
-                            'color': '#222',
-                            'fontWeight': '600'
-                        }
-                        for i, r in enumerate(real_data)
-                        if r.get('anomaly') == 'Yes'
-                    ]
-
-                    # buat dropdown untuk alert-select
-                    options = [
-                        {"label": f"{r['date']} — Real: {r['value']}", "value": r['date']}
-                        for r in real_data
-                    ]
-
-                return forecast_data, real_data, style_data_conditional, options
-
         except Exception as e:
-            import traceback
-            print(f"[ERROR] load_data_from_db_on_compare_page: {e}")
-            traceback.print_exc()
-            return None, [], [], []
+            print("[COMPARE][ERROR] gagal akses database:", e)
+            latest_forecast = None
+
+        db_has_data = latest_forecast is not None
+
+        # ======================================================
+        # 1️⃣ PRIORITAS: DB ADA → Gunakan DB (meskipun Local ada)
+        # ======================================================
+        if db_has_data:
+            print("[COMPARE] DB ditemukan → gunakan DB, abaikan Local")
+
+            forecast_data = latest_forecast.forecast_output
+
+            real_entry = (
+                db.query(RealDataInput)
+                .filter(RealDataInput.forecast_id == latest_forecast.id)
+                .order_by(RealDataInput.created_at.desc())
+                .first()
+            )
+
+            real_data = real_entry.real_data if real_entry else []
+
+            # fallback tambahan: tambahkan alert_sent jika hilang
+            for row in real_data:
+                if 'alert_sent' not in row:
+                    row['alert_sent'] = False
+
+            # generate style anomaly
+            style_data_conditional = [
+                {
+                    'if': {'row_index': i},
+                    'backgroundColor': '#ffdddd',
+                    'color': '#222',
+                    'fontWeight': '600'
+                }
+                for i, r in enumerate(real_data)
+                if r.get('anomaly') == 'Yes'
+            ]
+
+            options = [
+                {"label": f"{r['date']} — Real: {r['value']}", "value": r['date']}
+                for r in real_data
+            ]
+
+            return forecast_data, real_data, style_data_conditional, options
+
+        # ======================================================
+        # 2️⃣ PRIORITAS: DB KOSONG + Local ADA → gunakan LocalStorage
+        # ======================================================
+        if not db_has_data and local_forecast:
+            print("[COMPARE] DB kosong, Local ada → gunakan Local forecast")
+            raise PreventUpdate  # biarkan local_storage dipakai
+
+        # ======================================================
+        # 3️⃣ TIDAK ADA APA-APA → tampil kosong
+        # ======================================================
+        print("[COMPARE] Tidak ada DB dan tidak ada Local forecast → tampil kosong")
+        return None, [], [], []
+
